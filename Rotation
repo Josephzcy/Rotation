@@ -1,0 +1,16 @@
+vec3 position, eulerAngles;
+mat4 matMapToLidar;
+position.x=readJson["pos"][0];
+position.y=readJson["pos"][1];
+position.z=readJson["pos"][2];
+eulerAngles.x=readJson["rot"][0];
+eulerAngles.y=readJson["rot"][1];
+eulerAngles.z=readJson["rot"][2];
+matMapToLidar = inverse(translate(position) * mat4_cast(quat(eulerAngles)))
+
+Rot0.x=readJson["bboxes3D"][0]["rot"][0];
+Rot0.y=readJson["bboxes3D"][0]["rot"][1];
+Rot0.z=readJson["bboxes3D"][0]["rot"][2];
+quat quatlocalRos(Rot0);
+quatlocalRos = quat_cast(matMapToLidar * mat4_cast(quatlocalRos));
+vec3 finalAngles = cybertron::eulerAngles(quatlocalRos);
